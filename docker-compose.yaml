@@ -12,22 +12,28 @@ services:
         build: ./Database
         ports:
             - 5432:5432
+        environment:
+            # POSTGRES_PASSWORD: postgres 
+            # POSTGRES_DB: postgres
+            POSTGRES_HOST_AUTH_METHOD: trust
 
     api:
         depends_on:
             - reverseproxy
+        links:
             - database
+       
         image: api
         build: ./FefuFitnessAPI
         restart: always
         environment:
             DB_NAME: postgres
-            DB_PORT: 5432
             DB_PASS: postgres
             DB_USER: postgres
             DB_HOST: database
+            DB_PORT: 5432
             SECRET_AUTH: e95a3684b9982fcfd46eea716707f80cef515906eb49c4cb961dfde39a41ce21
             QR_SECRET: 0adc3ab8295a7a50ee8fe71e0cc184be551dc67996750760493274b81ae0b365
             ALGORITHM: HS256
             EXCEL_FOLDER_PATH: src/static/import_export
-            APK_PATH: src/static/download/app-release.apk
+            APK_PATH: src/static/download
